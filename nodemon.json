@@ -4,6 +4,7 @@
         "MYSQL_PASSWORD" : "cacau2014",
         "MYSQL_DATABASE" : "myDB",
         "MYSQL_HOST" : "localhost",
-        "MYSQL_PORT" : 3306
+        "MYSQL_PORT" : 3306,
+        "JWT_KEY": "segredo"
     }
 }
