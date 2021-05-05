@@ -5,13 +5,13 @@
                 "authProtocol": "default"
             },
             "previewLimit": 50,
-            "server": "localhost",
-            "port": 3306,
+            "server": "192.168.15.2",
+            "port": 3307,
             "driver": "MariaDB",
-            "name": "myDB",
+            "name": "servidor",
             "database": "myDB",
             "username": "root",
-            "password": "cacau2014"
+            "password": "SENHAsenha@019283"
         }
     ]
 }

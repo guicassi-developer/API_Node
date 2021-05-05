@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('../mysql').pool;
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 //INSERE UM USUARIO
 router.post('/cadastro', (req, res, next) =>{
@@ -16,8 +16,8 @@ router.post('/cadastro', (req, res, next) =>{
                 bcrypt.hash(req.body.senha, 10,(errBcrypt, hash)=>{
                     if(errBcrypt){return res.status(500).send({ error : errBcrypt})}
                     conn.query(
-                        'INSERT INTO users (email, senha) VALUES (?,?)',
-                        [req.body.email ,hash],
+                        'INSERT INTO users (name, email, senha) VALUES (?,?,?)',
+                        [req.body.name, req.body.email , hash],
                         (error, results) =>{
                             conn.release();
                     
@@ -31,7 +31,11 @@ router.post('/cadastro', (req, res, next) =>{
                                 expiresIn: '1h'
                             })
     
-                            res.status(201).send({token: token});
+                            res.status(201).send({
+                                token: token,
+                                personKey: hash,
+                                name: req.body.name
+                            });
                         }
                     );    
                 });  
@@ -45,13 +49,15 @@ router.post('/login',(req,res,next)=>{
         const query = `SELECT * FROM users WHERE email =?`;
         conn.query(query,[req.body.email],(error,results,fields)=>{
             conn.release();
+            
             if(error){ return  res.status(500).send({error: error})};
             if(results.length === 0){
-                return res.status(401).send ({message: 'E-mail  não encontrado' })
+                const message = JSON.stringify('Email ja cadastrado')
+                return res.status(401).send(message)
             };
             bcrypt.compare(req.body.senha, results[0].senha,(err,result)=>{
                 if(err){
-                    return res.status(401).send({message: 'Falha na auteticação'})
+                    return res.status(401).send('Falha na Autenticação')
                 }
                 if(result){
                     const token = jwt.sign({
@@ -63,7 +69,9 @@ router.post('/login',(req,res,next)=>{
                     })
                     return res.status(200).send({
                         //message:'Autenticado com sucesso',
-                        token  :token                            
+                        token  :token,
+                        personKey : results[0].senha,
+                        name: results[0].name      
                     })
                 }
                 return res.status(401).send({message:'Falha na autenticação'})
@@ -72,5 +80,7 @@ router.post('/login',(req,res,next)=>{
         });
     });
 });
+
+
 
 module.exports = router;

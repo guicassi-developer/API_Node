@@ -1,10 +1,10 @@
 {
     "env" : {
         "MYSQL_USER" : "root",
-        "MYSQL_PASSWORD" : "cacau2014",
+        "MYSQL_PASSWORD" : "SENHAsenha@019283",
         "MYSQL_DATABASE" : "myDB",
-        "MYSQL_HOST" : "localhost",
-        "MYSQL_PORT" : 3306,
+        "MYSQL_HOST" : "192.168.15.2",
+        "MYSQL_PORT" : 3307,
         "JWT_KEY": "segredo"
     }
 }
